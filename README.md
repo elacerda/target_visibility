@@ -61,7 +61,7 @@ Usage
       --end_date YYYY-MM-DD
                             Final date of the timeline to be averiguated. Defaults to None.
       --output FILENAME, -O FILENAME
-                            Outputs to file.
+                            Outputs to file. Defaults to None.
       --twilight {astronomical,nautical,civil}
                             It defines the observable night: 
                                 (evening twilight)<>(obs. night)<>(morning twilight).
@@ -71,10 +71,10 @@ Usage
                                 "astronomical": sun crossing the -18 deg altitude horizon.
                             Defaults to astronomical.
       --min_moonsep MIN_MOONSEP
-                            Minimal separation angle to the moon, in degrees.
+                            Minimal separation angle to the moon, in degrees. Defaults to 40 deg.
       --max_airmass MAX_AIRMASS
-                            Maximal airmass.
-      --min_alt MIN_ALT     Minimal altitude.
+                            Maximal airmass. Defaults to 2.
+      --min_alt MIN_ALT     Minimal altitude. Defaults to 40 deg.
       --unit_ra {deg,hourangle}
                             Helps astropy.coordinates.SkyCoord to parse the RA from FILENAME. Defaults to deg.
       --tel_lat TEL_LAT     Telescope geodetic latitude in degrees. Could be in decimal or dms. Defaults to T80-South latitude (-30d10m04.31s).

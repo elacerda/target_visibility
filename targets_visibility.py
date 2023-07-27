@@ -49,11 +49,11 @@ entry line:
 Values are: 
     "civil": sun crossing the -6 deg altitude horizon;
     "nautical": sun crossing the -12 deg altitude horizon;
-    "astronomical": sun crossing the -18 deg altitude horizon.
+    "astronomical": sun crossing the -18 deg altitude horizon. 
 Defaults to astronomical.""",
-    'min_moonsep': 'Minimal separation angle to the moon, in degrees.',
-    'max_airmass': 'Maximal airmass.',
-    'min_alt': 'Minimal altitude.',
+    'min_moonsep': 'Minimal separation angle to the moon, in degrees. Defaults to 40 deg.',
+    'max_airmass': 'Maximal airmass. Defaults to 2',
+    'min_alt': 'Minimal altitude. Defaults to 40 deg.',
     'unit_ra': 'Helps astropy.coordinates.SkyCoord to parse the RA from FILENAME. Defaults to deg.',
     'tel_lat': 'Telescope geodetic latitude in degrees. Could be in decimal or dms. Defaults to T80-South latitude (-30d10m04.31s).',
     'tel_lon': 'Telescope geodetic longitude in degrees. Could be in decimal or dms. Defaults to T80-South longitude (-70d48m20.48s).',
@@ -64,7 +64,7 @@ See: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones""",
     'start_date': """Initial date to the timeline to be averiguated. If --end_date is not setted, the program will
 run for this night only.""",
     'end_date': 'Final date of the timeline to be averiguated. Defaults to None.',
-    'output': 'Outputs to file.',
+    'output': 'Outputs to file. Defaults to None.',
 }
 
 def parse_arguments():
