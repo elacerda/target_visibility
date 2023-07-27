@@ -157,9 +157,11 @@ if __name__ == '__main__':
             formatted_loc = ', '.join(["{:.4f} {}".format(i.value, i.unit) for i in args.observer.location.to_geodetic()])
             print(f'# TELESCOPE LOCATION (lon, lat, hei): ({formatted_loc})')
             print(f'# TELESCOPE TIMEZONE: {args.observer.timezone}')
-            print(f'# START DATE: {args.start_date}')
             if args.end_date is not None:
+                print(f'# START DATE: {args.start_date}')
                 print(f'# END DATE: {args.end_date}')
+            else:
+                print(f'# DATE: {args.start_date}')
             print('DATE,RA,DEC,ATNIGHT,AIRMASS,ALTITUDE,MOONSEP,TOTAL')
             for i_t, t in enumerate(args.targets):
                 if ot[i_t]:
