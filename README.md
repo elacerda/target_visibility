@@ -23,12 +23,12 @@ The scripts produces a CSV file containing the following information at each lin
 Usage
 -----
 
-**target_visibility.py** usage:
+**targets_visibility.py** usage:
 ```
-    usage: target_visibility.py [-h] [--end_date YYYY-MM-DD] [--output FILENAME] [--twilight {astronomical,nautical,civil}]
-                                [--min_moonsep MIN_MOONSEP] [--max_airmass MAX_AIRMASS] [--min_alt MIN_ALT] [--unit_ra {deg,hourangle}]
-                                [--tel_lat TEL_LAT] [--tel_lon TEL_LON] [--tel_hei TEL_HEI] [--tel_name TEL_NAME] [--tel_tz TEL_TZ]
-                                FILENAME YYYY-MM-DD
+    usage: targets_visibility.py [-h] [--end_date YYYY-MM-DD] [--output FILENAME] [--twilight {astronomical,nautical,civil}]
+                                 [--min_moonsep MIN_MOONSEP] [--max_airmass MAX_AIRMASS] [--min_alt MIN_ALT] [--unit_ra {deg,hourangle}]
+                                 [--tel_lat TEL_LAT] [--tel_lon TEL_LON] [--tel_hei TEL_HEI] [--tel_name TEL_NAME] [--tel_tz TEL_TZ]
+                                 FILENAME YYYY-MM-DD
     Check targets visibility at the sky of some location of the Earth.
 
     It uses three constraints: maximal airmass, minimal moon separation and minimal altitude.
@@ -89,14 +89,19 @@ Usage
 Example
 -------
 ```bash
-    $ python3 target_visibility.py targets.csv 2023-01-01
+    $ python3 targets_visibility.py targets.csv 2023-01-01
+    # TELESCOPE: T80-South
+    # TELESCOPE LOCATION (lon, lat, hei): (-70.8057 deg, -30.1679 deg, 2178.0000 m)
+    # TELESCOPE TIMEZONE: America/Santiago
+    # START DATE: 2023-01-01
+    # END DATE: 2023-01-05
     DATE,RA,DEC,ATNIGHT,AIRMASS,ALTITUDE,MOONSEP,TOTAL
     2023-01-01,2.105175095121998,-0.3815939553815652,1,0,1,0,0
     2023-01-01,17.921878822876767,-70.95404058902848,0,0,0,1,0
     2023-01-01,6.201913813027653,-70.92900805509113,0,0,0,1,0
 
-    $ python3 target_visibility.py targets.csv 2023-01-01 --min_alt 80
-    target_visibility.py: Zero targets are observable during the requested timeline within the requested constraints.
+    $ python3 targets_visibility.py targets.csv 2023-01-01 --min_alt 80
+    targets_visibility.py: Zero targets are observable during the requested timeline within the requested constraints.
 ```
 
 Contact
