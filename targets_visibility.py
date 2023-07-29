@@ -18,7 +18,7 @@ from astroplan import (Observer, FixedTarget, observability_table,
 warnings.filterwarnings('ignore')
 
 __script_name__ = basename(sys.argv[0])
-__script_desc__ = """Check targets visibility at the sky of some location of the Earth.
+__script_desc__ = """Check targets visibility at the sky at some location of the Earth for a time interval.
 
 It uses three constraints: maximal airmass, minimal moon separation and minimal altitude.
 The night is defined by the interval between evening and morning twilights (either civil,
@@ -68,9 +68,14 @@ run for this night only.""",
 }
 
 def parse_arguments():
-    parser = ap.ArgumentParser(prog=__script_name__, 
-                               description=__script_desc__, 
-                               formatter_class=ap.RawTextHelpFormatter)
+    t_ch = ['astronomical', 'nautical', 'civil']
+
+    parser = ap.ArgumentParser(
+        prog=__script_name__, 
+        description=__script_desc__, 
+        formatter_class=ap.RawTextHelpFormatter
+    )
+    
     # POSITIONAL ARGUMENTS
     parser.add_argument('filename', metavar='FILENAME', help=args_help['filename'])
     parser.add_argument('start_date', metavar='YYYY-MM-DD', help=args_help['start_date'])
@@ -78,13 +83,11 @@ def parse_arguments():
     # OPTIONAL ARGUMENTS
     parser.add_argument('--end_date', metavar='YYYY-MM-DD', default=None, help=args_help['end_date'])
     parser.add_argument('--output', '-O', metavar='FILENAME', default=None, help=args_help['output'])
-    parser.add_argument('--twilight', choices=['astronomical', 'nautical', 'civil'], 
-                        default='astronomical', help=args_help['twilight'])
+    parser.add_argument('--twilight', choices=t_ch, default=t_ch[0], help=args_help['twilight'])
     parser.add_argument('--min_moonsep', default=40, type=float, help=args_help['min_moonsep'])
     parser.add_argument('--max_airmass', default=2, type=float, help=args_help['max_airmass'])
     parser.add_argument('--min_alt', default=40, type=float, help=args_help['min_alt'])
-    parser.add_argument('--unit_ra', choices=['deg', 'hourangle'], 
-                        default='deg', help=args_help['unit_ra'])
+    parser.add_argument('--unit_ra', choices=['deg', 'hourangle'], default='deg', help=args_help['unit_ra'])
     parser.add_argument('--tel_lat', default='-30d10m04.31s', help=args_help['tel_lat'])
     parser.add_argument('--tel_lon', default='-70d48m20.48s', help=args_help['tel_lon'])
     parser.add_argument('--tel_hei', default=2178, type=float, help=args_help['tel_hei'])

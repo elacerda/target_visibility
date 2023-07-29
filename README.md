@@ -1,7 +1,7 @@
 Targets visibility
 ==================
 
-Check targets visibility at the sky of some location of the Earth.
+Check targets visibility at the sky at some location of the Earth for a time interval.
 
 It uses three constraints: maximal airmass, minimal moon separation and minimal altitude.
 The night is defined by the interval between evening and morning twilights (either civil,
