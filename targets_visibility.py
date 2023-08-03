@@ -12,7 +12,7 @@ from astroplan.utils import time_grid_from_range
 from astropy.coordinates import EarthLocation, Angle, SkyCoord
 from astroplan import (Observer, FixedTarget, observability_table,
                        AltitudeConstraint, AirmassConstraint, AtNightConstraint, 
-                       MoonSeparationConstraint)
+                       MoonSeparationConstraint, is_event_observable)
 
 # Ignore warnings
 warnings.filterwarnings('ignore')
@@ -133,13 +133,29 @@ def parse_arguments():
     args.targets = targets
     return args
 
+def ieo(constraints, observer, target, jd_night, time_resolution=10):
+    str_local_time = f'{jd_night.strftime("%Y-%m-%d")} 23:59:00'
+    local_dt = datetime.fromisoformat(str_local_time)
+    utc_Time = observer.datetime_to_astropy_time(local_dt)
+    start_time = observer.twilight_evening_astronomical(utc_Time, which='nearest')
+    end_time = observer.twilight_morning_astronomical(utc_Time, which='nearest')
+    time_grid = time_grid_from_range(
+        [start_time, end_time],
+        time_resolution=time_resolution*u.min
+    )
+    oc = {}
+    for cname, c in constraints.items():
+        ieobs = is_event_observable(c, observer, target.coord, times=time_grid)
+        oc[cname] = ieobs.any()
+    oc['ieo'] = all(x for x in oc.values())
+    return oc
+
 if __name__ == '__main__':
     args = parse_arguments()
 
     start_date = Time(args.start_date)
     end_date = Time(args.end_date) if args.end_date is not None else start_date + 1*u.day
-    time_grid = time_grid_from_range([start_date, end_date], time_resolution=1*u.day)
-
+    
     ot = observability_table(
         constraints=[v for v in args.constraints.values()],
         observer=args.observer,
@@ -148,6 +164,7 @@ if __name__ == '__main__':
     )
     n_possible_nights = sum([int(x['ever observable']) for x in ot])
 
+    time_grid = time_grid_from_range([start_date, end_date], time_resolution=1*u.day)
     if n_possible_nights > 0:
         close_f = True
         if isinstance(args.output, io.TextIOWrapper):
@@ -168,21 +185,17 @@ if __name__ == '__main__':
             print('DATE,RA,DEC,ATNIGHT,AIRMASS,ALTITUDE,MOONSEP,TOTAL')
             for i_t, t in enumerate(args.targets):
                 if ot[i_t]:
-                    coord = t.coord
                     ra = t.coord.ra.to(args.unit_ra).value
                     dec = t.coord.dec.value
-                    # CREATE TARGET CONSTRAINTS
-                    constraints = {}
-                    for k, v in args.constraints.items():
-                        constraints[k] = v.compute_constraint(time_grid, args.observer, t.coord)
                     # CHECK TARGET NIGHT OBSERVABILITY
                     for i_day, _jd in enumerate(time_grid):
                         date_str = datetime.strftime(_jd.datetime, '%Y-%m-%d')
-                        avail_airmass = int(constraints['airmass'][i_day])
-                        avail_atnight = int(constraints['atnight'][i_day])
-                        avail_altitud = int(constraints['altitud'][i_day])
-                        avail_moonsep = int(constraints['moonsep'][i_day])
-                        avail = avail_airmass & avail_atnight & avail_altitud & avail_moonsep
+                        oc = ieo(args.constraints, args.observer, t, _jd)
+                        avail_airmass = int(oc['airmass'])
+                        avail_atnight = int(oc['atnight'])
+                        avail_altitud = int(oc['altitud'])
+                        avail_moonsep = int(oc['moonsep'])
+                        avail = oc['ieo']
                         print(
                             '{},{},{},{},{},{},{},{}'.format(
                                 date_str, ra, dec, avail_airmass, 
