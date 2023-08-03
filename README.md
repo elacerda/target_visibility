@@ -89,7 +89,7 @@ Usage
 Example
 -------
 ```bash
-    $ python3 targets_visibility.py targets.csv 2023-01-01
+    $ python3 targets_visibility.py targets.csv 2023-01-01 --unit_ra hourangle
     # TELESCOPE: T80-South
     # TELESCOPE LOCATION (lon, lat, hei): (-70.8057 deg, -30.1679 deg, 2178.0000 m)
     # TELESCOPE TIMEZONE: America/Santiago
@@ -97,7 +97,7 @@ Example
     DATE,RA,DEC,ATNIGHT,AIRMASS,ALTITUDE,MOONSEP,TOTAL
     2023-01-01,2.105175095121998,-0.3815939553815652,1,0,1,0,0
     2023-01-01,17.921878822876767,-70.95404058902848,0,0,0,1,0
-    2023-01-01,6.201913813027653,-70.92900805509113,0,0,0,1,0
+    2023-01-01,6.201913813027653,-70.92900805509113,1,0,0,1,0
 
     $ python3 targets_visibility.py targets.csv 2023-01-01 --min_alt 80
     targets_visibility.py: Zero targets are observable during the requested timeline within the requested constraints.
