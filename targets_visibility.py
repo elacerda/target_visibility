@@ -133,12 +133,15 @@ def parse_arguments():
     args.targets = targets
     return args
 
+
 def ieo(constraints, observer, target, jd_night, time_resolution=10):
-    str_local_time = f'{jd_night.strftime("%Y-%m-%d")} 23:59:00'
+    str_local_time = f'{jd_night.strftime("%Y-%m-%d")} 12:00:00'
     local_dt = datetime.fromisoformat(str_local_time)
     utc_Time = observer.datetime_to_astropy_time(local_dt)
-    start_time = observer.twilight_evening_astronomical(utc_Time, which='nearest')
-    end_time = observer.twilight_morning_astronomical(utc_Time, which='nearest')
+    start_time, end_time  = observer.tonight(
+        utc_Time, 
+        horizon=constraints['atnight'].max_solar_altitude
+    )
     time_grid = time_grid_from_range(
         [start_time, end_time],
         time_resolution=time_resolution*u.min
@@ -147,7 +150,7 @@ def ieo(constraints, observer, target, jd_night, time_resolution=10):
     for cname, c in constraints.items():
         ieobs = is_event_observable(c, observer, target.coord, times=time_grid)
         oc[cname] = ieobs.any()
-    oc['ieo'] = all(x for x in oc.values())
+    oc['ieo'] = all(oc.values())
     return oc
 
 if __name__ == '__main__':
